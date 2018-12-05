@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Kasa
@@ -71,15 +70,21 @@ namespace Kasa
 				rowIdx++;
 			}
 		}
+		/// <summary>
+		/// Event pri kliknuti na predajnu polozku
+		/// </summary>
 		public event EventHandler ItemClicked;
-
+		/// <summary>
+		///Event pri kliku na tlacidlo indikatora predajnej polozky 
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="e"></param>
 		protected virtual void OnItemClicked(Item item, EventArgs e)
 		{
 			var handler = ItemClicked;
 			if (handler != null)
 				handler(item, e);
 		}
-
 		/// <summary>
 		/// Event pri kliknuti na polozku katalogu
 		/// </summary>

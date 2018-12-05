@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Kasa
 {
+	/// <summary>
+	/// Hlavne okno aplikacie Kasa
+	/// </summary>
 	public partial class FormMain : Form
 	{
 		public FormMain()
@@ -37,42 +35,76 @@ namespace Kasa
 			);
 			itemsCatalog.ItemClicked += OnCatalogItemClicked;
 		}
-
+		/// <summary>
+		/// Event pri stlačení tlačidla indikátora predajnej položky
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void OnCatalogItemClicked(object sender, EventArgs e)
 		{
 			var item = sender as Item;
 			if (item != null)
 				AddItem(item);
 		}
-
+		/// <summary>
+		/// Pridanie položky do objednávky
+		/// </summary>
+		/// <param name="item"></param>
 		private void AddItem(Item item)
 		{
-			dataGridViewOrder.Rows.Add(item.Title, item.Price,"x");
+			dataGridViewOrder.Rows.Add(item.Title, item.Price, "x");
+			dataGridViewOrder.Rows[dataGridViewOrder.Rows.Count - 1].Tag = item;
 			items.Add(item);
 			UpdatePrice();
 		}
-		private readonly List<Item> items = new List<Item>();
 
+		/// <summary>
+		/// Zoznam položiek objednávky
+		/// </summary>
+		private readonly List<Item> items = new List<Item>();
+		/// <summary>
+		/// Naformátovanie celkovej ceny objednávky
+		/// </summary>
 		private void UpdatePrice()
 		{
 			var price = items.Sum(i => i.Price);
-
-			textBoxPrice.Text = price.ToString();
-
-			calculatorMain.ComparedValue = price;
+			textBoxPrice.Text = price.ToString("N");
+			calculatorMain.ComparedValue = price;			//aktualizacia porovnavanej ceny v kalkulacke
 		}
-
+		/// <summary>
+		/// Event pri kliknutí na tlačidlo pre uloženie objednávky
+		/// </summary>
 		private void blinkButtonSaveOrder_Click(object sender, EventArgs e)
 		{
 			if (items.Count > 0)
 			{
-				var order = new Order(items);
+				var order = new Order(items);		//TODO: dokončiť uloženie objednávky
 
 				dataGridViewOrder.Rows.Clear();
 				items.Clear();
 				UpdatePrice();
 				calculatorMain.Clear();
 			}
+		}
+		/// <summary>
+		/// Vymazanie položky objednavky pred jej uložením kliknutím na tlačidlo pre odtránenie položky
+		/// </summary>
+		private void dataGridViewOrder_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.ColumnIndex == dataGridViewOrder.Columns["ColumnRemove"].Index)					//stlpec s tlacidlom pre odstranenie polozky
+			{
+				var clickedRow = dataGridViewOrder.Rows[e.RowIndex];
+				if (clickedRow.Tag.GetType() == typeof(Item))
+				{
+					var item = clickedRow.Tag as Item;
+					if (item != null)
+					{
+						dataGridViewOrder.Rows.Remove(clickedRow);
+						items.Remove(item);
+						UpdatePrice();
+					}
+				}
+			}		
 		}
 	}
 }
