@@ -69,7 +69,7 @@ namespace Kasa
 		{
 			var price = items.Sum(i => i.Price);
 			textBoxPrice.Text = price.ToString("N");
-			calculatorMain.ComparedValue = price;			//aktualizacia porovnavanej ceny v kalkulacke
+			calculatorMain.ComparedValue = price;													//aktualizacia porovnavanej ceny v kalkulacke
 		}
 		/// <summary>
 		/// Event pri kliknutí na tlačidlo pre uloženie objednávky
@@ -78,7 +78,7 @@ namespace Kasa
 		{
 			if (items.Count > 0)
 			{
-				var order = new Order(items);		//TODO: dokončiť uloženie objednávky
+				var order = new Order(items);														//TODO: dokončiť uloženie objednávky
 
 				dataGridViewOrder.Rows.Clear();
 				items.Clear();
