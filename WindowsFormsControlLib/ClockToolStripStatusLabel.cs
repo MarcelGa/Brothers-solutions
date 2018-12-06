@@ -48,7 +48,7 @@ namespace WindowsFormsControlLib
 
 			FormatText();										//prve nastavenie
 			var timer = new Timer();
-			timer.Interval = 1000;
+			timer.Interval = 1000;								//aktualizacia textu kazdu 1s
 			timer.Tick += OnTimerIntervalElapsed;
 			timer.Start();
 		}
@@ -57,7 +57,8 @@ namespace WindowsFormsControlLib
 		/// </summary>
 		private void OnTimerIntervalElapsed(object source, EventArgs e)
 		{
-			FormatText();
+			if(!DesignMode)									//len v behu aplikacie sa aktualizuje text
+				FormatText();
 		}
 	}
 }
